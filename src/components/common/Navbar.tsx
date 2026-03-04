@@ -16,6 +16,12 @@ export default function Navbar() {
             <Link href="/about" className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors">
               About
             </Link>
+            <Link href="/socials" className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors">
+              Socials
+            </Link>
+            <Link href="/community" className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors">
+              Community Service
+            </Link>
             <Link href="/education" className="text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors">
               Education
             </Link>
