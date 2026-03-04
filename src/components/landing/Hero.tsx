@@ -27,7 +27,7 @@ export default function Hero() {
           including the Government&apos;s S$1 billion Private Credit Growth Fund and Temasek&apos;s private credit platform.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 justify-center sm:justify-start">
-          <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">GPA: 3.77/4.00</span>
+
           <span className="px-3 py-1 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 rounded-full">Dean&apos;s List</span>
         </div>
       </div>
