@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constitutional Law &amp; Human Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ===================================================
+   CSS CUSTOM PROPERTIES — Paper & Ink Theme
+   Modify these variables to retheme the entire deck
+   =================================================== */
+:root {
+  --bg-cream:        #faf9f7;
+  --text-primary:    #1a1a1a;
+  --text-secondary:  #4a4540;
+  --text-muted:      #999;
+  --accent-crimson:  #c41e3a;
+  --line-color:      #ddd9cf;
+  --rule-color:      rgba(196, 30, 58, 0.32);
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'Source Serif 4', serif;
+
+  /* All sizes use clamp() — never fixed px */
+  --title-size:   clamp(1.5rem,  5vw,   4rem);
+  --h2-size:      clamp(1.25rem, 3.5vw, 2.5rem);
+  --h3-size:      clamp(0.95rem, 2vw,   1.5rem);
+  --body-size:    clamp(0.72rem, 1.4vw, 1.05rem);
+  --small-size:   clamp(0.6rem,  0.9vw, 0.78rem);
+
+  --slide-padding:  clamp(1rem, 4vw, 4rem);
+  --content-gap:    clamp(0.5rem, 2vw, 2rem);
+  --element-gap:    clamp(0.25rem, 1vw, 1rem);
+
+  /* Margin line x-position */
+  --margin-x: clamp(56px, 7.5vw, 96px);
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.8s;
+}
+
+/* ===================================================
+   RESET
+   =================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ===================================================
+   VIEWPORT BASE CSS (mandatory — included in full)
+   =================================================== */
+html, body { height: 100%; overflow-x: hidden; }
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.slide {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.slide-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow: hidden;
+  /* Custom padding: left shifts past the red margin line */
+  padding-top:    var(--slide-padding);
+  padding-bottom: var(--slide-padding);
+  padding-right:  var(--slide-padding);
+  padding-left:   calc(var(--margin-x) + clamp(1rem, 2.5vw, 2rem));
+  position: relative;
+  z-index: 2;
+}
+
+.card, .container, .content-box {
+  max-width: min(90vw, 1000px);
+  max-height: min(80vh, 700px);
+}
+
+img, .image-container {
+  max-width: 100%;
+  max-height: min(50vh, 400px);
+  object-fit: contain;
+}
+
+@media (max-height: 700px) {
+  :root {
+    --slide-padding: clamp(0.75rem, 3vw, 2rem);
+    --content-gap:   clamp(0.4rem, 1.5vw, 1rem);
+    --title-size:    clamp(1.25rem, 4.5vw, 2.5rem);
+    --h2-size:       clamp(1rem, 3vw, 1.75rem);
+  }
+}
+@media (max-height: 600px) {
+  :root {
+    --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+    --content-gap:   clamp(0.3rem, 1vw, 0.75rem);
+    --title-size:    clamp(1.1rem, 4vw, 2rem);
+    --body-size:     clamp(0.65rem, 1.2vw, 0.9rem);
+  }
+  .nav-dots, .keyboard-hint { display: none; }
+}
+@media (max-height: 500px) {
+  :root {
+    --slide-padding: clamp(0.4rem, 2vw, 1rem);
+    --title-size:    clamp(1rem, 3.5vw, 1.5rem);
+    --h2-size:       clamp(0.9rem, 2.5vw, 1.25rem);
+    --body-size:     clamp(0.6rem, 1vw, 0.82rem);
+  }
+}
+@media (max-width: 600px) {
+  :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.2s !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ===================================================
+   PAPER & INK — SLIDE TEXTURE
+   =================================================== */
+
+/* Ruled notebook lines on every slide */
+.slide::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 39px,
+    var(--line-color) 39px,
+    var(--line-color) 40px
+  );
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Red margin line */
+.slide::after {
+  content: '';
+  position: absolute;
+  left: var(--margin-x);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--rule-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slide { background: var(--bg-cream); }
+
+/* ===================================================
+   TYPOGRAPHY
+   =================================================== */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--title-size);
+  color: var(--text-primary);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--h2-size);
+  color: var(--text-primary);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--h3-size);
+  color: var(--text-primary);
+}
+p, li {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===================================================
+   REVEAL ANIMATIONS — Calm Editorial
+   =================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur) var(--ease-expo),
+              transform var(--dur) var(--ease-expo);
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+
+.reveal.d1 { transition-delay: 0.10s; }
+.reveal.d2 { transition-delay: 0.20s; }
+.reveal.d3 { transition-delay: 0.30s; }
+.reveal.d4 { transition-delay: 0.40s; }
+.reveal.d5 { transition-delay: 0.50s; }
+.reveal.d6 { transition-delay: 0.60s; }
+
+.reveal-expand {
+  transform-origin: left center;
+  transform: scaleX(0);
+  opacity: 0;
+  transition: transform var(--dur) var(--ease-expo), opacity 0.3s ease;
+}
+.slide.visible .reveal-expand { transform: scaleX(1); opacity: 1; }
+
+/* ===================================================
+   SHARED COMPONENTS
+   =================================================== */
+
+/* Section label — e.g. "Education · 05" */
+.section-label {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--small-size);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-crimson);
+  margin-bottom: clamp(0.35rem, 1.2vh, 0.85rem);
+}
+
+/* Newspaper double-rule divider */
+.double-rule {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: clamp(0.45rem, 1.5vh, 1.1rem) 0;
+}
+.double-rule .thick { height: 2px; background: var(--text-primary); max-width: 560px; }
+.double-rule .thin  { height: 1px; background: var(--text-primary); opacity: 0.28; max-width: 560px; }
+
+/* § ornament divider */
+.ornament-div {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: clamp(0.45rem, 1.5vh, 1rem) 0;
+  color: var(--accent-crimson);
+}
+.ornament-div .oline { flex: 1; height: 1px; background: currentColor; opacity: 0.3; max-width: 55px; }
+.ornament-div .omark { font-family: var(--font-display); font-size: clamp(0.8rem, 1.5vw, 1.1rem); }
+
+/* Editorial bullet list with § markers */
+.ink-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.35rem, 0.9vh, 0.7rem);
+}
+.ink-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--body-size);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.ink-list li::before {
+  content: '§';
+  font-family: var(--font-display);
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+  color: var(--accent-crimson);
+  flex-shrink: 0;
+  margin-top: 0.18em;
+  opacity: 0.65;
+}
+.ink-list li strong { font-weight: 600; color: var(--text-primary); }
+
+/* Pull quote */
+.pull-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 2.4vw, 1.85rem);
+  color: var(--text-primary);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.pull-attr {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-top: clamp(0.4rem, 1.2vh, 0.8rem);
+}
+
+/* Faded large corner decoration */
+.corner-mark {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--line-color);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Thin crimson header stripe at top of slide */
+.header-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent-crimson);
+  z-index: 3;
+}
+
+/* Case study label badge */
+.case-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent-crimson);
+  padding: clamp(0.25rem, 0.7vh, 0.45rem) clamp(0.6rem, 1.5vw, 1.1rem);
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+  align-self: flex-start;
+}
+.case-badge span {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--small-size);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: white;
+}
+
+/* Principle cards grid */
+.principles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.5rem, 1.2vw, 0.9rem);
+  max-height: min(62vh, 440px);
+}
+.principle-card {
+  background: rgba(255,255,255,0.75);
+  border-left: 3px solid var(--accent-crimson);
+  padding: clamp(0.55rem, 1.4vw, 1.1rem);
+}
+.principle-card .num {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--accent-crimson);
+  opacity: 0.18;
+  line-height: 1;
+  margin-bottom: 0.15rem;
+}
+.principle-card h3 { font-size: clamp(0.82rem, 1.7vw, 1.15rem); margin-bottom: 0.3rem; }
+.principle-card p  { font-size: clamp(0.62rem, 1.05vw, 0.82rem); line-height: 1.5; }
+
+/* Rights framework 3-column grid */
+.framework-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.5rem, 1.2vw, 0.9rem);
+  max-height: min(58vh, 400px);
+}
+.fw-card {
+  padding: clamp(0.65rem, 1.6vw, 1.3rem);
+  border-top: 2px solid var(--accent-crimson);
+  background: rgba(255,255,255,0.55);
+}
+.fw-card .roman {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: var(--accent-crimson);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.fw-card h3 { font-size: clamp(0.8rem, 1.5vw, 1.05rem); margin-bottom: 0.3rem; }
+.fw-card p  { font-size: clamp(0.6rem, 1vw, 0.8rem); line-height: 1.55; }
+
+@media (max-width: 600px) {
+  .framework-grid  { grid-template-columns: 1fr; }
+  .principles-grid { grid-template-columns: 1fr; }
+}
+@media (max-height: 600px) {
+  .principles-grid { max-height: min(55vh, 320px); }
+}
+
+/* ===================================================
+   PROGRESS BAR
+   =================================================== */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--accent-crimson);
+  z-index: 1000;
+  transition: width 0.3s ease;
+}
+
+/* ===================================================
+   NAVIGATION DOTS
+   =================================================== */
+.nav-dots {
+  position: fixed;
+  right: clamp(0.6rem, 1.5vw, 1.2rem);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.7vh, 7px);
+  z-index: 100;
+}
+.nav-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--line-color);
+  border: 1px solid rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+.nav-dot.active {
+  background: var(--accent-crimson);
+  border-color: var(--accent-crimson);
+  transform: scale(1.5);
+}
+
+/* ===================================================
+   SLIDE 1 — TITLE
+   =================================================== */
+.title-header {
+  position: absolute;
+  top: clamp(1.2rem, 3.5vh, 2.5rem);
+  left: calc(var(--margin-x) + clamp(1rem, 2.5vw, 2rem));
+  right: var(--slide-padding);
+  z-index: 3;
+}
+.title-header .tk { height: 3px; background: var(--text-primary); }
+.title-header .tn { height: 1px; background: var(--text-primary); opacity: 0.3; margin-top: 4px; }
+.title-header .meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: clamp(0.35rem, 0.9vh, 0.6rem);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--small-size);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.title-slide h1 {
+  font-size: clamp(2rem, 6.5vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.title-slide h1 em { font-style: italic; color: var(--accent-crimson); }
+.title-sub {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.78rem, 1.55vw, 1.1rem);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 500px;
+  margin-top: clamp(0.4rem, 1.2vh, 0.9rem);
+}
+.title-footer {
+  position: absolute;
+  bottom: clamp(0.9rem, 2.5vh, 1.8rem);
+  left: calc(var(--margin-x) + clamp(1rem, 2.5vw, 2rem));
+  right: var(--slide-padding);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  z-index: 3;
+}
+
+/* ===================================================
+   SLIDE 2 — QUOTE — crimson vertical bar
+   =================================================== */
+.quote-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+.crimson-bar {
+  width: 3px;
+  height: clamp(55px, 11vh, 90px);
+  background: var(--accent-crimson);
+  margin-right: clamp(1.2rem, 2.5vw, 2rem);
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 0.2em;
+}
+
+/* ===================================================
+   CLOSING SLIDE — large faded § watermark
+   =================================================== */
+.closing-bg-mark {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(8rem, 28vw, 24rem);
+  color: var(--accent-crimson);
+  opacity: 0.05;
+  right: calc(-1 * clamp(1rem, 2vw, 2rem));
+  bottom: calc(-1 * clamp(1rem, 2vh, 3rem));
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation dots -->
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+
+<!-- ===================================================
+     SLIDE 01 — TITLE
+     =================================================== -->
+<section class="slide title-slide" id="slide-1" aria-label="Title slide">
+
+  <div class="title-header reveal">
+    <div class="tk"></div>
+    <div class="tn"></div>
+    <div class="meta">
+      <span>Pitch Deck &nbsp;·&nbsp; Constitutional Studies</span>
+      <span>March 2026</span>
+    </div>
+  </div>
+
+  <div class="slide-content" style="padding-top: clamp(5rem, 13vh, 8rem); padding-bottom: clamp(3rem, 7vh, 5rem); justify-content: center;">
+    <div class="section-label reveal d1">Overview &nbsp;·&nbsp; 01 of 14</div>
+    <h1 class="reveal d2">Constitutional<br>Law <em>&amp;</em><br>Human<br>Development</h1>
+    <div class="ornament-div reveal d3">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+    <p class="title-sub reveal d4">How fundamental rights shape the conditions for human flourishing — and why constitutional design matters for every generation.</p>
+  </div>
+
+  <div class="title-footer reveal d5">
+    <span>Constitutional Law &amp; Human Development</span>
+    <span>↓ Space · Arrow keys to navigate</span>
+  </div>
+
+  <!-- Decorative large § in corner -->
+  <div class="corner-mark" style="font-size: clamp(7rem, 22vw, 18rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(1rem, 2vh, 2rem));">§</div>
+
+</section>
+
+
+<!-- ===================================================
+     SLIDE 02 — OPENING QUOTE
+     =================================================== -->
+<section class="slide" id="slide-2" aria-label="Opening quote">
+  <div class="slide-content">
+    <div class="section-label reveal">Founding Words &nbsp;·&nbsp; 02</div>
+
+    <div class="quote-wrapper reveal d2">
+      <div class="crimson-bar"></div>
+      <div>
+        <p class="pull-quote">"A constitution is not merely a lawyers' document, it is a vehicle of Life, and its spirit is always the spirit of the Age."</p>
+        <p class="pull-attr">— B.R. Ambedkar &nbsp;·&nbsp; Constituent Assembly of India, 1949</p>
+      </div>
+    </div>
+
+    <div class="double-rule reveal d3">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+
+    <p class="reveal d4" style="max-width: 540px;">Constitutions are not frozen texts. They are living frameworks — and their quality determines whether citizens can lead lives of dignity, capability, and freedom.</p>
+  </div>
+
+  <div class="corner-mark" style="font-size: clamp(5rem, 16vw, 14rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1.5rem));">❝</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 03 — THE CASE
+     =================================================== -->
+<section class="slide" id="slide-3" aria-label="The case for constitutions">
+  <div class="slide-content">
+    <div class="section-label reveal">The Case &nbsp;·&nbsp; 03</div>
+    <h2 class="reveal d2">Why Constitutions Drive<br>Human Development</h2>
+    <div class="double-rule reveal d2">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3">Constitutional text directly determines who receives education, healthcare, and economic security under the law.</li>
+      <li class="reveal d3">Justiciable rights enable citizens to hold governments accountable in court when obligations go unmet.</li>
+      <li class="reveal d4">Constitutional commitments shape state budgets, legislation, and institutional priorities across decades.</li>
+      <li class="reveal d4">Nations with stronger social rights provisions consistently show higher Human Development Index scores.</li>
+    </ul>
+  </div>
+
+  <div class="corner-mark" style="font-size: clamp(5rem, 18vw, 15rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1rem)); color: var(--accent-crimson); opacity: 0.07;">03</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 04 — RIGHTS FRAMEWORK
+     =================================================== -->
+<section class="slide" id="slide-4" aria-label="Rights framework">
+  <div class="slide-content">
+    <div class="section-label reveal">Framework &nbsp;·&nbsp; 04</div>
+    <h2 class="reveal d1">A Framework of Fundamental Rights</h2>
+    <div class="ornament-div reveal d2">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+    <div class="framework-grid reveal d3">
+      <div class="fw-card">
+        <span class="roman">I.</span>
+        <h3>Civil &amp; Political</h3>
+        <p>Right to vote, due process, freedom of expression, equality before the law, right to life and liberty.</p>
+      </div>
+      <div class="fw-card">
+        <span class="roman">II.</span>
+        <h3>Economic &amp; Social</h3>
+        <p>Right to work, education, healthcare, housing, social security, and an adequate standard of living.</p>
+      </div>
+      <div class="fw-card">
+        <span class="roman">III.</span>
+        <h3>Cultural &amp; Environmental</h3>
+        <p>Right to participate in cultural life, environmental rights, minority language protections, and intergenerational equity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 05 — THE RIGHT TO EDUCATION
+     =================================================== -->
+<section class="slide" id="slide-5" aria-label="Right to education">
+  <div class="header-stripe"></div>
+  <div class="slide-content">
+    <div class="section-label reveal">Education &nbsp;·&nbsp; 05</div>
+    <h2 class="reveal d1">The Right to Education</h2>
+    <div class="double-rule reveal d2">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3">Over 140 national constitutions explicitly guarantee the right to education — one of the most universally constitutionalized rights.</li>
+      <li class="reveal d3">Compulsory primary education is the constitutional baseline in the vast majority of democratic states.</li>
+      <li class="reveal d4">Progressive realization frameworks extend constitutional obligations toward secondary and higher education over time.</li>
+      <li class="reveal d5">Language of instruction rights protect minority communities from forced assimilation through education policy.</li>
+    </ul>
+  </div>
+  <div class="corner-mark" style="font-size: clamp(5rem, 18vw, 15rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1rem)); color: var(--accent-crimson); opacity: 0.06;">05</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 06 — THE RIGHT TO HEALTH
+     =================================================== -->
+<section class="slide" id="slide-6" aria-label="Right to health">
+  <div class="slide-content">
+    <div class="section-label reveal">Health &nbsp;·&nbsp; 06</div>
+    <h2 class="reveal d1">The Right to Health</h2>
+    <div class="ornament-div reveal d2">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+
+    <!-- Inline pull-quote before bullets -->
+    <div class="quote-wrapper reveal d2" style="margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">
+      <div class="crimson-bar" style="height: clamp(35px, 7vh, 58px);"></div>
+      <div>
+        <p class="pull-quote" style="font-size: clamp(0.82rem, 1.8vw, 1.35rem);">"The right to the highest attainable standard of physical and mental health."</p>
+        <p class="pull-attr">— ICESCR, Article 12</p>
+      </div>
+    </div>
+
+    <ul class="ink-list">
+      <li class="reveal d3">115+ constitutions contain explicit health rights provisions — a dramatic increase since the 1990s.</li>
+      <li class="reveal d4">State obligations are framed around availability, accessibility, acceptability, and quality of services.</li>
+      <li class="reveal d5">Courts have enforced constitutional health rights to mandate access to medicines, treatments, and clean water.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 07 — ECONOMIC & SOCIAL RIGHTS
+     =================================================== -->
+<section class="slide" id="slide-7" aria-label="Economic and social rights">
+  <div class="header-stripe"></div>
+  <div class="slide-content">
+    <div class="section-label reveal">Economic Rights &nbsp;·&nbsp; 07</div>
+    <h2 class="reveal d1">Economic &amp; Social Rights</h2>
+    <div class="double-rule reveal d2">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3">Social security, minimum wage, and housing rights create constitutional floors below which living standards cannot fall.</li>
+      <li class="reveal d3">Property rights protect citizens from arbitrary deprivation while enabling land reform for broader development.</li>
+      <li class="reveal d4">The <em>progressive realization</em> doctrine bridges the gap between constitutional aspiration and state fiscal capacity.</li>
+      <li class="reveal d5">The <em>non-retrogression</em> principle: governments cannot roll back rights once a standard of living has been constitutionally achieved.</li>
+    </ul>
+  </div>
+  <div class="corner-mark" style="font-size: clamp(5rem, 18vw, 15rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1rem)); color: var(--accent-crimson); opacity: 0.06;">07</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 08 — CHILDREN'S RIGHTS
+     =================================================== -->
+<section class="slide" id="slide-8" aria-label="Children's rights">
+  <div class="slide-content">
+    <div class="section-label reveal">Children &nbsp;·&nbsp; 08</div>
+    <h2 class="reveal d1">Protecting Child Development</h2>
+    <div class="ornament-div reveal d2">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3">The UN Convention on the Rights of the Child (1989) has 196 state parties — the most widely ratified human rights treaty in history.</li>
+      <li class="reveal d3">The <em>best interests of the child</em> principle operates as a primary constitutional consideration in family and welfare courts worldwide.</li>
+      <li class="reveal d4">Constitutional protections guarantee rights to name, nationality, family life, and cultural identity from birth.</li>
+      <li class="reveal d5">Special obligations protect children from exploitation, violence, child labor, and harmful traditional practices.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 09 — COURTS AS GUARDIANS
+     =================================================== -->
+<section class="slide" id="slide-9" aria-label="Constitutional courts">
+  <div class="header-stripe"></div>
+  <div class="slide-content">
+    <div class="section-label reveal">Institutions &nbsp;·&nbsp; 09</div>
+    <h2 class="reveal d1">Constitutional Courts<br>as Guardians</h2>
+    <div class="double-rule reveal d2">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3">Constitutional courts enforce rights through public interest litigation — enabling civil society to litigate on behalf of entire populations.</li>
+      <li class="reveal d3">Structural interdicts require executive agencies to develop detailed, court-supervised implementation plans.</li>
+      <li class="reveal d4">The <em>minimum core</em> doctrine holds that states must satisfy at least a minimum essential level of each socio-economic right, regardless of resources.</li>
+      <li class="reveal d5"><strong>Landmark:</strong> <em>Treatment Action Campaign v. Minister of Health</em> (South Africa, 2002) forced government to provide antiretroviral drugs to pregnant mothers.</li>
+    </ul>
+  </div>
+  <div class="corner-mark" style="font-size: clamp(5rem, 18vw, 15rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1rem)); color: var(--accent-crimson); opacity: 0.06;">09</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 10 — CASE STUDY: SOUTH AFRICA
+     =================================================== -->
+<section class="slide" id="slide-10" aria-label="Case study South Africa">
+  <div class="slide-content">
+    <div class="section-label reveal">Case Study &nbsp;·&nbsp; 10</div>
+    <div class="case-badge reveal d1">
+      <span>South Africa &nbsp;·&nbsp; Constitution of 1996</span>
+    </div>
+    <h2 class="reveal d2">A Constitution Built<br>for Development</h2>
+    <ul class="ink-list" style="margin-top: clamp(0.4rem, 1.2vh, 0.8rem);">
+      <li class="reveal d3"><strong>Section 26</strong> guarantees the right of access to adequate housing, with a state duty of progressive realization.</li>
+      <li class="reveal d3"><strong>Section 27</strong> guarantees access to healthcare services, sufficient food and water, and social security.</li>
+      <li class="reveal d4">Socio-economic rights are subject to the "reasonable measures" test — making them justiciable without mandating specific outcomes.</li>
+      <li class="reveal d5">South Africa's Constitutional Court has become one of the world's most active enforcers of socio-economic rights.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 11 — CASE STUDY: INDIA
+     =================================================== -->
+<section class="slide" id="slide-11" aria-label="Case study India">
+  <div class="header-stripe"></div>
+  <div class="slide-content">
+    <div class="section-label reveal">Case Study &nbsp;·&nbsp; 11</div>
+    <div class="case-badge reveal d1">
+      <span>India &nbsp;·&nbsp; Constitution of 1950</span>
+    </div>
+    <h2 class="reveal d2">Directive Principles as<br>Development Roadmap</h2>
+    <ul class="ink-list" style="margin-top: clamp(0.4rem, 1.2vh, 0.8rem);">
+      <li class="reveal d3">Part IV (Directive Principles of State Policy) sets aspirational development goals guiding all legislation and policy — though not directly enforceable in court.</li>
+      <li class="reveal d3">DPSPs include: equal pay, free and compulsory education, a living wage, maternity relief, and the right to work.</li>
+      <li class="reveal d4">The Supreme Court expanded Article 21 (right to life) to encompass livelihood, health, education, and a clean environment.</li>
+      <li class="reveal d5">India's model represents a distinctive approach: separating aspirational goals from hard rights while using courts to bridge the gap over time.</li>
+    </ul>
+  </div>
+  <div class="corner-mark" style="font-size: clamp(5rem, 18vw, 15rem); right: clamp(0.5rem, 2vw, 2rem); bottom: calc(-1 * clamp(0.5rem, 1vh, 1rem)); color: var(--accent-crimson); opacity: 0.06;">11</div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 12 — WHERE CONSTITUTIONS FALL SHORT
+     =================================================== -->
+<section class="slide" id="slide-12" aria-label="The gap">
+  <div class="slide-content">
+    <div class="section-label reveal">Challenge &nbsp;·&nbsp; 12</div>
+    <h2 class="reveal d1">Where Constitutions<br>Fall Short</h2>
+    <div class="ornament-div reveal d2">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+    <ul class="ink-list">
+      <li class="reveal d3"><strong>Parchment barriers:</strong> Constitutional text guarantees rights that are ignored in practice — particularly for marginalized populations.</li>
+      <li class="reveal d3"><strong>Resource constraints:</strong> Progressive realization can become permanent deferral without binding timelines or benchmarks.</li>
+      <li class="reveal d4"><strong>Access to justice gap:</strong> Rights only protect those who can navigate complex legal systems — often the least vulnerable in society.</li>
+      <li class="reveal d5"><strong>Political will:</strong> Constitutional duties are routinely ignored without independent, well-resourced enforcement institutions.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 13 — PRINCIPLES FOR REFORM
+     =================================================== -->
+<section class="slide" id="slide-13" aria-label="Principles for reform">
+  <div class="header-stripe"></div>
+  <div class="slide-content">
+    <div class="section-label reveal">Recommendations &nbsp;·&nbsp; 13</div>
+    <h2 class="reveal d1">Principles for Constitutional Design</h2>
+    <div class="double-rule reveal d2">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <div class="principles-grid reveal d3">
+      <div class="principle-card">
+        <div class="num">01</div>
+        <h3>Justiciability</h3>
+        <p>Make social and economic rights directly enforceable in courts, with standing for civil society organizations to litigate.</p>
+      </div>
+      <div class="principle-card">
+        <div class="num">02</div>
+        <h3>Institutional Capacity</h3>
+        <p>Build state institutions with the mandate, resources, and expertise capable of delivering on constitutional promises.</p>
+      </div>
+      <div class="principle-card">
+        <div class="num">03</div>
+        <h3>Accountability Mechanisms</h3>
+        <p>Establish independent bodies to monitor, report, and hold governments accountable for rights realization over time.</p>
+      </div>
+      <div class="principle-card">
+        <div class="num">04</div>
+        <h3>Participatory Interpretation</h3>
+        <p>Include rights-holders — especially marginalized communities — in constitutional interpretation and law reform processes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     SLIDE 14 — CLOSING
+     =================================================== -->
+<section class="slide" id="slide-14" aria-label="Closing slide">
+  <div class="slide-content">
+    <div class="section-label reveal">Closing &nbsp;·&nbsp; 14</div>
+    <h2 class="reveal d1" style="font-size: clamp(1.9rem, 5.5vw, 4.5rem); line-height: 1.0;">The Path<br>Forward</h2>
+    <div class="ornament-div reveal d2">
+      <div class="oline"></div>
+      <div class="omark">§</div>
+      <div class="oline"></div>
+    </div>
+    <p class="reveal d3" style="font-family: var(--font-display); font-style: italic; font-size: clamp(0.9rem, 2.1vw, 1.5rem); color: var(--text-primary); line-height: 1.5; max-width: 560px; margin-bottom: clamp(0.5rem, 1.5vh, 1rem);">Constitutional text is a beginning, not an end. Human development requires constitutions that evolve with their societies — holding power accountable while expanding the horizons of human possibility.</p>
+    <p class="reveal d4" style="max-width: 480px; color: var(--text-muted);">The challenge of our generation: translate fundamental law into fundamental change.</p>
+    <div class="double-rule reveal d5" style="margin-top: clamp(0.75rem, 2vh, 1.5rem);">
+      <div class="thick"></div>
+      <div class="thin"></div>
+    </div>
+    <p class="reveal d6" style="font-size: var(--small-size); color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase;">Constitutional Law &amp; Human Development &nbsp;·&nbsp; 2026</p>
+  </div>
+
+  <!-- Large faded § watermark -->
+  <div class="closing-bg-mark">§</div>
+</section>
+
+
+<script>
+/* ===================================================
+   SLIDE PRESENTATION CONTROLLER
+   Paper & Ink — Constitutional Law & Human Development
+   Handles: keyboard, touch, wheel, progress, nav dots
+   =================================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides      = Array.from(document.querySelectorAll('.slide'));
+    this.total       = this.slides.length;
+    this.current     = 0;
+    this.lastWheel   = 0;
+    this.wheelDelay  = 850;
+    this.touchStartY = 0;
+    this.bar         = document.getElementById('progressBar');
+    this.dotsNav     = document.getElementById('navDots');
+    this.init();
+  }
+
+  init() {
+    this.buildDots();
+    this.setupObserver();
+    this.setupKeys();
+    this.setupTouch();
+    this.setupWheel();
+    this.setupScrollProgress();
+    // Activate first slide immediately
+    this.slides[0].classList.add('visible');
+    this.update(0);
+  }
+
+  /* --- Intersection Observer triggers .visible for animations --- */
+  setupObserver() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          const i = this.slides.indexOf(e.target);
+          if (i > -1) this.update(i);
+        }
+      });
+    }, { threshold: 0.55 });
+    this.slides.forEach(s => obs.observe(s));
+  }
+
+  /* --- Navigation dots --- */
+  buildDots() {
+    this.slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'nav-dot';
+      d.setAttribute('aria-label', `Slide ${i + 1}`);
+      d.addEventListener('click', () => this.goTo(i));
+      this.dotsNav.appendChild(d);
+    });
+  }
+
+  update(i) {
+    this.current = i;
+    // Update dots
+    this.dotsNav.querySelectorAll('.nav-dot').forEach((d, j) =>
+      d.classList.toggle('active', j === i));
+    // Update progress bar
+    const pct = this.total > 1 ? (i / (this.total - 1)) * 100 : 100;
+    this.bar.style.width = `${pct}%`;
+  }
+
+  goTo(i) {
+    const clamped = Math.max(0, Math.min(i, this.total - 1));
+    this.slides[clamped].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* --- Keyboard navigation --- */
+  setupKeys() {
+    document.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'ArrowDown': case 'ArrowRight': case ' ':
+          e.preventDefault(); this.goTo(this.current + 1); break;
+        case 'ArrowUp': case 'ArrowLeft':
+          e.preventDefault(); this.goTo(this.current - 1); break;
+        case 'PageDown':
+          e.preventDefault(); this.goTo(this.current + 1); break;
+        case 'PageUp':
+          e.preventDefault(); this.goTo(this.current - 1); break;
+        case 'Home':
+          e.preventDefault(); this.goTo(0); break;
+        case 'End':
+          e.preventDefault(); this.goTo(this.total - 1); break;
+      }
+    });
+  }
+
+  /* --- Touch/swipe navigation --- */
+  setupTouch() {
+    document.addEventListener('touchstart', e => {
+      this.touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const delta = this.touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) > 45) this.goTo(this.current + (delta > 0 ? 1 : -1));
+    }, { passive: true });
+  }
+
+  /* --- Mouse wheel navigation with cooldown --- */
+  setupWheel() {
+    document.addEventListener('wheel', e => {
+      const now = Date.now();
+      if (now - this.lastWheel < this.wheelDelay) return;
+      this.lastWheel = now;
+      if (Math.abs(e.deltaY) > 25) this.goTo(this.current + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: true });
+  }
+
+  /* --- Continuous scroll progress bar update --- */
+  setupScrollProgress() {
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll > 0) this.bar.style.width = `${(scrollTop / maxScroll) * 100}%`;
+    }, { passive: true });
+  }
+}
+
+new SlidePresentation();
+</script>
+</body>
+</html>
